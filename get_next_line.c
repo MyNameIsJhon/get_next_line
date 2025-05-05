@@ -97,5 +97,4 @@ char	*get_next_line(int fd)
 /* 		printf("%s", get); */
 /* 		free(get); */
 /* 	} */
-/**/
 /* } */

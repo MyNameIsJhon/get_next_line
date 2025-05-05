@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s[i])
@@ -83,45 +83,19 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 
 char	*ft_strjoin(const char *s1, const char *s2)
 {
-	size_t	len1;
-	size_t	len2;
-	char	*join;
-	size_t	i;
-	size_t	j;
+	char	*dst;
+	char	*ptr;
 
 	if (!s1 || !s2)
 		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	join = malloc(len1 + len2 + 1);
-	if (!join)
+	dst = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!dst)
 		return (NULL);
-	i = 0;
-	while (i < len1)
-	{
-		join[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < len2)
-	{
-		join[i + j] = s2[j];
-		j++;
-	}
-	join[i + j] = '\0';
-	return (join);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-	char	*ptr;
-
-	ptr = s;
-	i = 0;
-	while (i < n)
-	{
-		ptr[i] = 0;
-		i++;
-	}
+	ptr = dst;
+	while (*s1)
+		*ptr++ = *s1++;
+	while (*s2)
+		*ptr++ = *s2++;
+	*ptr = '\0';
+	return (dst);
 }
