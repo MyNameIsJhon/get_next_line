@@ -57,7 +57,7 @@ static void	shift_buffer(char *buf)
 	buf[j] = '\0';
 }
 
-static ssize_t read_line(int fd, char *buf, char **line)
+static ssize_t	read_line(int fd, char *buf, char **line)
 {
 	ssize_t	bytes;
 	char	*nl;
@@ -79,7 +79,7 @@ static ssize_t read_line(int fd, char *buf, char **line)
 		if (nl)
 			break ;
 	}
-	return bytes;
+	return (bytes);
 }
 
 char	*get_next_line(int fd)
