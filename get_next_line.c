@@ -9,6 +9,7 @@
 /*   Updated: 2025/04/12 17:30:42 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 #include <fcntl.h>
 
@@ -56,19 +57,12 @@ static void	shift_buffer(char *buf)
 	buf[j] = '\0';
 }
 
-char	*get_next_line(int fd)
+static ssize_t read_line(int fd, char *buf, char **line)
 {
-	static char	buf[BUFFER_SIZE + 1];
-	char		*nl;
-	char		*line;
-	ssize_t		bytes;
+	ssize_t	bytes;
+	char	*nl;
 
-	line = NULL;
-	if (buf[0] != '\0' && !ft_strchr(buf, '\n'))
-	{
-		line = append_line(line, buf, NULL);
-		buf[0] = '\0';
-	}
+	bytes = 1;
 	while (1)
 	{
 		nl = ft_strchr(buf, '\n');
@@ -80,11 +74,27 @@ char	*get_next_line(int fd)
 			buf[bytes] = '\0';
 			nl = ft_strchr(buf, '\n');
 		}
-		line = append_line(line, buf, nl);
+		*line = append_line(*line, buf, nl);
 		shift_buffer(buf);
 		if (nl)
 			break ;
 	}
+	return bytes;
+}
+
+char	*get_next_line(int fd)
+{
+	static char	buf[BUFFER_SIZE + 1];
+	char		*line;
+	ssize_t		bytes;
+
+	line = NULL;
+	if (buf[0] != '\0' && !ft_strchr(buf, '\n'))
+	{
+		line = append_line(line, buf, NULL);
+		buf[0] = '\0';
+	}
+	bytes = read_line(fd, buf, &line);
 	if (bytes <= 0)
 	{
 		if (!line)
@@ -94,6 +104,45 @@ char	*get_next_line(int fd)
 	}
 	return (line);
 }
+
+/* char	*get_next_line(int fd) */
+/* { */
+/* 	static char	buf[BUFFER_SIZE + 1]; */
+/* 	char		*nl; */
+/* 	char		*line; */
+/* 	ssize_t		bytes; */
+/**/
+/* 	line = NULL; */
+/* 	if (buf[0] != '\0' && !ft_strchr(buf, '\n')) */
+/* 	{ */
+/* 		line = append_line(line, buf, NULL); */
+/* 		buf[0] = '\0'; */
+/* 	} */
+/* 	while (1) */
+/* 	{ */
+/* 		nl = ft_strchr(buf, '\n'); */
+/* 		if (!nl) */
+/* 		{ */
+/* 			bytes = read(fd, buf, BUFFER_SIZE); */
+/* 			if (bytes <= 0) */
+/* 				break ; */
+/* 			buf[bytes] = '\0'; */
+/* 			nl = ft_strchr(buf, '\n'); */
+/* 		} */
+/* 		line = append_line(line, buf, nl); */
+/* 		shift_buffer(buf); */
+/* 		if (nl) */
+/* 			break ; */
+/* 	} */
+/* 	if (bytes <= 0) */
+/* 	{ */
+/* 		if (!line) */
+/* 			return (NULL); */
+/* 		buf[0] = '\0'; */
+/* 		return (line); */
+/* 	} */
+/* 	return (line); */
+/* } */
 
 /* #include <stdio.h> */
 /* int main(void) */
