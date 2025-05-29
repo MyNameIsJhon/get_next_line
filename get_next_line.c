@@ -64,6 +64,11 @@ char	*get_next_line(int fd)
 	ssize_t		bytes;
 
 	line = NULL;
+	if (buf[0] != '\0' && !ft_strchr(buf, '\n'))
+	{
+		line = append_line(line, buf, NULL);
+		buf[0] = '\0';
+	}
 	while (1)
 	{
 		nl = ft_strchr(buf, '\n');
@@ -80,6 +85,13 @@ char	*get_next_line(int fd)
 		if (nl)
 			break ;
 	}
+	if (bytes <= 0)
+	{
+		if (!line)
+			return (NULL);
+		buf[0] = '\0';
+		return (line);
+	}
 	return (line);
 }
 
@@ -91,7 +103,7 @@ char	*get_next_line(int fd)
 /**/
 /* 	fd = open("./README.md", O_RDONLY); */
 /**/
-/* 	for(int i; i < 3 ; i++) */
+/* 	for(int i = 0; i < 3 ; i++) */
 /* 	{ */
 /* 		get = get_next_line(fd); */
 /* 		printf("%s", get); */
